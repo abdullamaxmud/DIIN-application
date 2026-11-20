@@ -1,0 +1,36 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+public/data/quran-meta.json
+public/data/surah/
+public/data/hisn.json
+public/data/hisn-index.json
+public/data/hisn/
+
+# Cloudflare wrangler cache
+.wrangler
+# local secrets (never commit)
+.dev.vars
+*.vapid-private.json
+.vapid-private.json

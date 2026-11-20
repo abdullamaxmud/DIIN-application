@@ -1,0 +1,13 @@
+# DIIN website — static files served by Cloudflare (Workers static assets, free plan).
+# Deploy:  npm run build   then   npx wrangler deploy
+# The push-notification server is a separate Worker in ./worker (its own wrangler.toml).
+name = "diin"
+compatibility_date = "2026-11-01"
+# free address: https://diin.<account-subdomain>.workers.dev
+workers_dev = true
+preview_urls = false
+
+[assets]
+directory = "./dist"
+# unknown paths (e.g. /quraanka, /adkaarta/27) get index.html so the app's router can show them
+not_found_handling = "single-page-application"

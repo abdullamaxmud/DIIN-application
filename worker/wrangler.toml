@@ -1,0 +1,25 @@
+# DIIN push-notification backend (Cloudflare Workers free plan)
+name = "diin-push"
+main = "src/index.ts"
+compatibility_date = "2026-11-01"
+workers_dev = true
+preview_urls = false
+
+# runs every minute and sends whatever is due (prayer times, adhkar, khatma reminder)
+[triggers]
+crons = ["* * * * *"]
+
+# create with:  npx wrangler d1 create diin   — then paste the printed database_id here
+[[d1_databases]]
+binding = "DB"
+database_name = "diin"
+database_id = "88c41f68-b45f-4dd2-ac99-d896918643fa"
+
+[vars]
+# the address of your Cloudflare Pages site (no trailing slash), e.g. https://diin.pages.dev
+ALLOWED_ORIGIN = "https://diin.diin-push.workers.dev"
+# how push services can reach you (Web Push standard): the site URL, or "mailto:you@example.com"
+ADMIN_CONTACT = "https://diin.diin-push.workers.dev"
+
+# secrets (never put them in this file):
+#   npx wrangler secret put VAPID_PRIVATE_JWK   ← the private key JSON from `npx @pushforge/builder vapid`
