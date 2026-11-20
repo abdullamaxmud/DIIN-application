@@ -307,6 +307,11 @@
       "Dul Xijja"
     ]
   },
+  "update": {
+    "ready": "Nooc cusub oo DIIN ah ayaa diyaar ah",
+    "action": "Cusboonaysii",
+    "later": "Hadda maya"
+  },
   "welcome": {
     "title": "Ku soo dhawow DIIN",
     "tagline": "Quraanka · Adkaarta · Salaadda",

@@ -8,17 +8,40 @@ import { AppServices } from './components/AppServices'
 import { useAccount } from './lib/account'
 import Home from './pages/Home'
 import Welcome from './pages/Welcome'
+import { UpdateBanner } from './components/UpdateBanner'
 import { t } from './i18n'
 
+/**
+ * Lazy screen that survives an app update: after a new version is published, the old version's
+ * screen files no longer exist, so a failed load reloads the page once to get the new version.
+ */
+function lazyPage<T extends { default: React.ComponentType }>(load: () => Promise<T>) {
+  return lazy(() =>
+    load().then(
+      (m) => {
+        try { sessionStorage.removeItem('diin.chunkReload') } catch { /* ignore */ }
+        return m
+      },
+      (err) => {
+        let reloaded = false
+        try { reloaded = sessionStorage.getItem('diin.chunkReload') === '1'; sessionStorage.setItem('diin.chunkReload', '1') } catch { /* ignore */ }
+        if (reloaded || !navigator.onLine) throw err
+        window.location.reload()
+        return new Promise<T>(() => {}) // the page is reloading
+      },
+    ),
+  )
+}
+
 // every screen except Home and Welcome is loaded on first visit (smaller start-up, faster first paint)
-const Quran = lazy(() => import('./pages/Quran'))
-const Adhkar = lazy(() => import('./pages/Adhkar'))
-const AdhkarSession = lazy(() => import('./pages/AdhkarSession'))
-const Prayer = lazy(() => import('./pages/Prayer'))
-const Khatma = lazy(() => import('./pages/Khatma'))
-const Notifications = lazy(() => import('./pages/Notifications'))
-const Privacy = lazy(() => import('./pages/Privacy'))
-const Admin = lazy(() => import('./pages/Admin'))
+const Quran = lazyPage(() => import('./pages/Quran'))
+const Adhkar = lazyPage(() => import('./pages/Adhkar'))
+const AdhkarSession = lazyPage(() => import('./pages/AdhkarSession'))
+const Prayer = lazyPage(() => import('./pages/Prayer'))
+const Khatma = lazyPage(() => import('./pages/Khatma'))
+const Notifications = lazyPage(() => import('./pages/Notifications'))
+const Privacy = lazyPage(() => import('./pages/Privacy'))
+const Admin = lazyPage(() => import('./pages/Admin'))
 
 const Loading = () => <p role="status" className="m-0 py-16 text-center text-sm text-muted">{t('common.loading')}</p>
 
@@ -41,6 +64,7 @@ export default function App() {
         <BrowserRouter>
           <NotifySync />
           <AppServices />
+          <UpdateBanner />
           <Suspense fallback={<Loading />}>
             <Gate>
               <Routes>
