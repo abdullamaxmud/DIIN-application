@@ -21,5 +21,9 @@ ALLOWED_ORIGIN = "https://diin.diin-push.workers.dev"
 # how push services can reach you (Web Push standard): the site URL, or "mailto:you@example.com"
 ADMIN_CONTACT = "https://diin.diin-push.workers.dev"
 
+# Google sign-in client id (public): uncomment and paste it, then `npm run deploy` (see README)
+# GOOGLE_CLIENT_ID = "….apps.googleusercontent.com"
+
 # secrets (never put them in this file):
+#   npx wrangler secret put ADMIN_KEY           ← password for the /admin dashboard
 #   npx wrangler secret put VAPID_PRIVATE_JWK   ← the private key JSON from `npx @pushforge/builder vapid`

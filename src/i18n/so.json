@@ -51,9 +51,15 @@
     "searching": "Goobtaada waa la raadinayaa…",
     "notOn": "Location-ka weli lama shidin",
     "android": "Android",
-    "androidSteps": ["Hoos u jiid kor shaashadda, taabo Location si uu u shido.", "Kadib: Settings → Apps → DIIN → Permissions → Location → Allow."],
+    "androidSteps": [
+      "Hoos u jiid kor shaashadda, taabo Location si uu u shido.",
+      "Kadib: Settings → Apps → DIIN → Permissions → Location → Allow."
+    ],
     "iphone": "iPhone",
-    "iphoneSteps": ["Settings → Privacy & Security → Location Services → shid.", "Hoos ka hel DIIN (ama Safari) → While Using the App."],
+    "iphoneSteps": [
+      "Settings → Privacy & Security → Location Services → shid.",
+      "Hoos ka hel DIIN (ama Safari) → While Using the App."
+    ],
     "comeBack": "Marka aad shiddo, ku soo noqo — si toos ah ayaan kuugu xidhi doonnaa.",
     "privacy": "Goobtaada cid kale looma diro — xisaabtu waxay ku dhacdaa gudaha taleefankaaga.",
     "unsupported": "Taleefankan ama browser-kan goob (GPS) ma bixiyo.",
@@ -68,7 +74,11 @@
   },
   "quran": {
     "script": "Xafs · Rasmul-Cuthmaani",
-    "tabs": { "khatmi": "Khatmi / Wird", "akhri": "Akhri", "dhageyso": "Dhageyso" },
+    "tabs": {
+      "khatmi": "Khatmi / Wird",
+      "akhri": "Akhri",
+      "dhageyso": "Dhageyso"
+    },
     "tabsLabel": "Qaybaha Quraanka",
     "bySurah": "Suuradaha (114)",
     "byJuz": "Juzka (30)",
@@ -83,7 +93,11 @@
     "fontDown": "Yaree farta",
     "fontUp": "Weyneey farta",
     "themeLabel": "Midabka akhriska",
-    "themes": { "light": "Cad", "sepia": "Sepia", "dark": "Madow" },
+    "themes": {
+      "light": "Cad",
+      "sepia": "Sepia",
+      "dark": "Madow"
+    },
     "startingAt": "Waxaad ka bilaabaysaa aayadda {a}",
     "fromStart": "ka bilow bilowga suuradda",
     "more": "Sii wad akhriska",
@@ -212,7 +226,11 @@
     "khatmaNote": "Waqtiga aad ku dooratay Qorshaha Khatmiga",
     "iosTitle": "iPhone (iOS 16.4+)",
     "iosBody": "Ogeysiisyadu waxay shaqeeyaan kaliya marka App-ka lagu daro Shaashadda Hoyga:",
-    "iosSteps": ["Taabo badhanka Share ee Safari", "Dooro “Add to Home Screen”", "Taabo Add, kadibna ka fur DIIN Shaashadda Hoyga"],
+    "iosSteps": [
+      "Taabo badhanka Share ee Safari",
+      "Dooro “Add to Home Screen”",
+      "Taabo Add, kadibna ka fur DIIN Shaashadda Hoyga"
+    ],
     "allow": "Oggolow Ogeysiisyada",
     "notNow": "Hadda maya",
     "on": "Ogeysiisyadu way shidan yihiin ✓",
@@ -230,9 +248,17 @@
     "title": "Ku rakib DIIN taleefankaaga",
     "body": "Waa bilaash, wuxuu shaqeeyaa internet la'aan, wuxuuna kaa qaadanayaa meel yar.",
     "iosTitle": "iPhone · Safari",
-    "iosSteps": ["Taabo badhanka Share (laba-jibbaarka leh fallaadha kor u socota)", "Hoos u dhaadhac oo dooro “Add to Home Screen”", "Taabo Add — DIIN waxay ka soo muuqan doontaa Shaashadda Hoyga"],
+    "iosSteps": [
+      "Taabo badhanka Share (laba-jibbaarka leh fallaadha kor u socota)",
+      "Hoos u dhaadhac oo dooro “Add to Home Screen”",
+      "Taabo Add — DIIN waxay ka soo muuqan doontaa Shaashadda Hoyga"
+    ],
     "androidTitle": "Android · Chrome · Edge",
-    "androidSteps": ["Fur menu-ga browser-ka (⋮ kor midig)", "Dooro “Install app” ama “Add to Home screen”", "Xaqiiji — DIIN waxay ka soo muuqan doontaa shaashaddaada"],
+    "androidSteps": [
+      "Fur menu-ga browser-ka (⋮ kor midig)",
+      "Dooro “Install app” ama “Add to Home screen”",
+      "Xaqiiji — DIIN waxay ka soo muuqan doontaa shaashaddaada"
+    ],
     "ok": "Waan fahmay"
   },
   "pages": {
@@ -243,9 +269,214 @@
     "notifications": "Ogeysiisyada"
   },
   "date": {
-    "days": ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimce", "Sabti"],
-    "months": ["Janaayo", "Febraayo", "Maarso", "Abriil", "May", "Juun", "Luulyo", "Ogost", "Sebtembar", "Oktoobar", "Nofembar", "Desembar"],
-    "hijriMonths": ["Muxarram", "Safar", "Rabiicul Awwal", "Rabiicul Aakhir", "Jumaadal Uulaa", "Jumaadal Aakhira", "Rajab", "Shacbaan", "Ramadaan", "Shawwaal", "Dul Qacda", "Dul Xijja"]
+    "days": [
+      "Axad",
+      "Isniin",
+      "Talaado",
+      "Arbaco",
+      "Khamiis",
+      "Jimce",
+      "Sabti"
+    ],
+    "months": [
+      "Janaayo",
+      "Febraayo",
+      "Maarso",
+      "Abriil",
+      "May",
+      "Juun",
+      "Luulyo",
+      "Ogost",
+      "Sebtembar",
+      "Oktoobar",
+      "Nofembar",
+      "Desembar"
+    ],
+    "hijriMonths": [
+      "Muxarram",
+      "Safar",
+      "Rabiicul Awwal",
+      "Rabiicul Aakhir",
+      "Jumaadal Uulaa",
+      "Jumaadal Aakhira",
+      "Rajab",
+      "Shacbaan",
+      "Ramadaan",
+      "Shawwaal",
+      "Dul Qacda",
+      "Dul Xijja"
+    ]
+  },
+  "welcome": {
+    "title": "Ku soo dhawow DIIN",
+    "tagline": "Quraanka · Adkaarta · Salaadda",
+    "body": "Ku gal si horumarkaaga — khatmiga, wirdka iyo adkaarta — uusan u lumin, oo aad ugu sii wadato taleefan kasta.",
+    "saved": "Horumarkaagu waa kaydsan yahay",
+    "anyPhone": "Ka sii wad taleefan kasta",
+    "google": "Ku gal Google",
+    "googleSoon": "Gelitaanka Google dhawaan ayuu shaqayn doonaa. Hadda ku sii wad magacaaga.",
+    "googleFail": "Gelitaanka Google ma suurtagelin. Isku day mar kale.",
+    "guest": "Sii wad adigoo aan gelin",
+    "nameLabel": "Magacaaga",
+    "namePlaceholder": "Tusaale: Cabdullaahi",
+    "nameNeeded": "Fadlan qor magacaaga.",
+    "guestNote": "Horumarkaagu wuxuu ku jiri doonaa taleefankan oo keliya. Mar kasta waad ku geli kartaa Google si aad u kaydiso.",
+    "start": "Bilow",
+    "busy": "Waa la diyaarinayaa…",
+    "back": "Dib u noqo",
+    "privacy": "Siyaasadda Asturnaanta",
+    "skip": "Taabo si aad u gudubto"
+  },
+  "privacy": {
+    "title": "Siyaasadda Asturnaanta",
+    "subtitle": "Waxa aan kaydinno iyo sababta",
+    "whatTitle": "Xogta aan kaydinno",
+    "what": [
+      "Magacaaga (iyo email-kaaga haddii aad ku gasho Google)",
+      "Magaaladaada iyo wadankaaga",
+      "Horumarkaaga: khatmiga, wirdka, meesha akhriska, adkaarta",
+      "Dookhyada ogeysiisyada"
+    ],
+    "whyTitle": "Sababta",
+    "why": "Si horumarkaagu uusan u lumin marka aad ka baxdo app-ka, aad taleefan beddesho ama aad dib u rakibto, iyo si app-ka loo hagaajiyo.",
+    "whoTitle": "Cidda arki karta",
+    "who": "Adiga iyo maamulaha app-ka DIIN oo keliya. Xogtaada lama iibiyo, xayeysiisna looma isticmaalo.",
+    "placeTitle": "Goobtaada",
+    "place": "Goobta saxda ah ee GPS-ka waxaa loo isticmaalaa waqtiyada salaadda oo keliya, mana laga diro taleefankaaga. Magaalada iyo wadanka waxaa laga garanayaa shabakadda internetka (Cloudflare).",
+    "deleteTitle": "Tirtiridda xogtaada",
+    "deleteBody": "Mar kasta waad tirtiri kartaa akoonkaaga iyo xogtaada oo dhan.",
+    "deleteBtn": "Tirtir akoonkayga",
+    "deleteConfirm": "Ma hubtaa? Akoonkaaga iyo horumarka la kaydiyay waa la tirtirayaa, dibna looma soo celin karo.",
+    "deleted": "Akoonkaaga waa la tirtiray.",
+    "deleteFail": "Tirtiriddu ma suurtagelin. Hubi internetka, kadib isku day mar kale."
+  },
+  "account": {
+    "title": "Akoonkaaga",
+    "signedInGoogle": "Waxaad ku gashay Google",
+    "guest": "Marti (taleefankan oo keliya)",
+    "signOut": "Ka bax",
+    "signOutConfirm": "Ma hubtaa inaad ka baxayso? Horumarkaagu wuu ku jirayaa taleefankan.",
+    "link": "Akoonkaaga & Asturnaanta",
+    "connectGoogle": "Ku xir Google si aad u kaydiso"
+  },
+  "admin": {
+    "title": "Dashboard-ka Maamulaha",
+    "loginTitle": "Gal dashboard-ka",
+    "password": "Furaha sirta ah",
+    "enter": "Gal",
+    "wrong": "Furaha waa khaldan yahay.",
+    "notConfigured": "Furaha dashboard-ka weli lama dejin (eeg README).",
+    "offline": "Server-ka lama gaarin. Hubi internetka.",
+    "signOut": "Ka bax",
+    "overview": "Guudmar",
+    "overviewSub": "Booqdayaasha, soo degsiga iyo horumarka isticmaaleyaasha",
+    "ranges": {
+      "today": "Maanta",
+      "week": "Toddobaad",
+      "month": "Bil"
+    },
+    "rangeNote": {
+      "today": "maanta",
+      "week": "7-dii maalmood ee u dambeeyay",
+      "month": "30-kii maalmood ee u dambeeyay"
+    },
+    "visitors": "Booqdayaasha",
+    "active": "Isticmaaleyaal firfircoon",
+    "installed": "Soo degsaday",
+    "installedNote": "wadarta",
+    "accounts": "Akoon leh",
+    "accountsNote": "Google {g} · martida {d}",
+    "push": "Ogeysiisyada",
+    "pushNote": "oggolaaday",
+    "daily": "Booqdayaasha maalinlaha ah",
+    "dailySub": "14-kii maalmood ee u dambeeyay",
+    "dailyLabel": "Jaantus: booqdayaasha maalin kasta, 14 maalmood",
+    "platforms": "Soo degsiga (rakibidda)",
+    "countries": "Wadamada",
+    "features": "Isticmaalka qaybaha",
+    "featuresSub": "(qalab kala duwan oo isticmaalay)",
+    "users": "Isticmaaleyaasha",
+    "search": "Raadi magac ama magaalo",
+    "noUsers": "Qof lama helin.",
+    "empty": "Weli xog ma jirto.",
+    "colName": "Magac",
+    "colCity": "Magaalo",
+    "colVia": "Gelitaan",
+    "colWird": "Wird (30 juz)",
+    "colPlan": "Khatmi",
+    "colAdhkar": "Adkaarta maanta",
+    "colLast": "Markii u dambeysay",
+    "via": {
+      "google": "Google",
+      "guest": "Martida"
+    },
+    "detail": "Faahfaahin",
+    "lastRead": "Akhriskii u dambeeyay",
+    "joined": "Ku biiray",
+    "appInstalled": "App-ka rakibay",
+    "notifications": "Ogeysiisyada",
+    "yes": "Haa",
+    "no": "Maya",
+    "streak": "{n} maalmood oo isku xiga",
+    "streakLabel": "Wirdka (maalmo isku xiga)",
+    "planDay": "Maalin {d}/{n}",
+    "planDone": "Khatmi dhammaystiran ✓",
+    "noPlan": "—",
+    "refresh": "Cusboonaysii",
+    "unknown": "Lama garanayo",
+    "ago": {
+      "now": "hadda",
+      "min": "{n} daqiiqo kahor",
+      "hour": "{n} saac kahor",
+      "day": "{n} maalmood kahor"
+    },
+    "platformNames": {
+      "android": "Android",
+      "ios": "iPhone",
+      "desktop": "Kombiyuutar",
+      "other": "Kale"
+    },
+    "featureNames": {
+      "quran": "Quraanka",
+      "listen": "Dhageysi",
+      "adhkar": "Adkaarta",
+      "prayer": "Salaadda",
+      "khatma": "Khatmiga"
+    }
+  },
+  "countries": {
+    "SO": "Soomaaliya",
+    "KE": "Kenya",
+    "ET": "Itoobiya",
+    "DJ": "Jabuuti",
+    "UG": "Uganda",
+    "TZ": "Tansaaniya",
+    "EG": "Masar",
+    "SD": "Suudaan",
+    "SA": "Sacuudi Carabiya",
+    "AE": "Imaaraadka Carabta",
+    "QA": "Qadar",
+    "KW": "Kuwayt",
+    "OM": "Cumaan",
+    "YE": "Yaman",
+    "TR": "Turkiga",
+    "SE": "Iswiidhan",
+    "NO": "Noorweey",
+    "FI": "Finland",
+    "DK": "Denmark",
+    "NL": "Holland",
+    "DE": "Jarmal",
+    "GB": "Ingiriiska",
+    "IE": "Ayrlaand",
+    "FR": "Faransiis",
+    "IT": "Talyaani",
+    "BE": "Beljim",
+    "CH": "Iswiiserland",
+    "US": "Maraykanka",
+    "CA": "Kanada",
+    "AU": "Australia",
+    "MY": "Malaysia",
+    "ZA": "Koonfur Afrika"
   },
   "_review": "Erayada Soomaaliga waxaa qoray AI; waa in uu dib u eego qof af-Soomaali ku hadla ka hor daabacaadda."
 }

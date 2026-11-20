@@ -104,6 +104,37 @@ npm run deploy
 
 ---
 
+## Akoonnada, kaydinta horumarka iyo Dashboard-ka
+
+- **Furitaanka:** animation-ka DIIN (index.html) ayaa soo baxa marka app-ka la furo.
+- **Qof cusub:** wuxuu arkaa "Ku soo dhawow DIIN" → **Ku gal Google** ama **Sii wad adigoo aan gelin** (magac kaliya).
+- **Kaydinta:** horumarka (wirdka, khatmiga, meesha akhriska, adkaarta, dookhyada) waxaa server-ka loo diraa 3 ilbiriqsi kadib isbeddel kasta. Qofka Google ku galay wuxuu dib ugu helayaa taleefan kasta.
+- **Siyaasadda Asturnaanta:** `/asturnaanta`. Qofku halkaas ayuu ka bixi karaa ama ka tirtiri karaa akoonkiisa.
+- **Dashboard-ka maamulaha:** `/admin`. Wuxuu muujiyaa booqdayaasha, inta soo degsatay, wadamada, qaybaha la isticmaalo iyo liiska dadka (magac, magaalo, horumar).
+
+### Furaha dashboard-ka (adiga kaliya)
+Gudaha `worker`:
+
+```powershell
+npx wrangler secret put ADMIN_KEY
+```
+
+Qor fure adag (ugu yaraan 16 xaraf). Kadib fur `/admin` oo geli furahaas. Furaha waxaa lagu kaydiyaa Cloudflare oo keliya.
+
+### Gelitaanka Google (Client ID, bilaash)
+1. Fur **console.cloud.google.com** → samee project cusub (tusaale "DIIN").
+2. **Google Auth Platform → Branding**: magaca app-ka "DIIN", email-kaaga taageerada, iyo link-ga asturnaanta: `https://diin.diin-push.workers.dev/asturnaanta`.
+3. **Audience**: "External" → **Publish app**.
+4. **Clients → Create client → Web application** → *Authorized JavaScript origins*: `https://diin.diin-push.workers.dev` (iyo `http://localhost:5173` horumarinta).
+5. Koobi **Client ID**-ga (`….apps.googleusercontent.com`). Ma aha sir.
+6. Ku dar labadan meelood, kadib daabac labadaba:
+   - `.env.production` → `VITE_GOOGLE_CLIENT_ID=…`
+   - `worker/wrangler.toml` → `[vars]` → `GOOGLE_CLIENT_ID = "…"`
+
+Inta aan Client ID la gelin, badhanka Google waa la demiyaa, dadkuna magacooda ayay ku galaan.
+
+---
+
 ## Ciwaan gaar ah (domain) — mar dambe
 
 1. Iibso domain (tusaale `diin.so`).
@@ -210,6 +241,23 @@ iPhone: push works only after "Add to Home Screen" (iOS 16.4+).
 - D1 allows 5M row reads a day. The cron reads every subscription each minute, which caps the free plan at roughly **3,000 subscribers**.
 - Workers Free also limits CPU time per invocation, so a very large burst of notifications in the same minute may be delayed.
 - Workers Paid ($5/month) removes both limits. Serving the static site stays free.
+
+## Accounts, saved progress and the admin dashboard
+
+- **Opening animation:** inline in `index.html`, so it paints before any script; removed by `src/main.tsx` after 1.8 s, or on tap.
+- **Welcome gate:** a new user chooses **Sign in with Google** or **continue with a name** (guest).
+- **Sync:** progress keys (`src/lib/syncKeys.ts`) carry change times. `src/components/AppServices.tsx` sends changes to `/api/sync` 3 s after an edit and on backgrounding, and pulls newer values on return. Per key, the newest change wins. Google users get their progress back on any device.
+- **Privacy page:** `/asturnaanta`, with sign-out and account deletion (`/api/me/delete`).
+- **Admin dashboard:** `/admin` shows visitors, installs, countries, section usage and a user list with progress. The password is the Worker secret `ADMIN_KEY` (`npx wrangler secret put ADMIN_KEY` in `worker/`).
+- **Google sign-in:**
+  - create an OAuth **Web** client in Google Cloud (Google Auth Platform);
+  - add the authorized JavaScript origin `https://diin.diin-push.workers.dev`;
+  - use `/asturnaanta` as the privacy policy URL;
+  - set the client id as `VITE_GOOGLE_CLIENT_ID` (`.env.production`) and `GOOGLE_CLIENT_ID` (`worker/wrangler.toml` vars), then redeploy both.
+  - The Worker verifies Google's RS256 signature, issuer, audience and expiry itself.
+- **Statistics:**
+  - anonymous random device id, one ping per new section per day (`src/lib/track.ts`);
+  - city and country come from Cloudflare's `request.cf`, not from GPS.
 
 ## Custom domain (later)
 

@@ -20,3 +20,15 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>,
 )
+
+// opening animation (index.html): shown for at least 1.8 s, tap to skip; short when motion is reduced
+const splash = document.getElementById('splash')
+if (splash) {
+  const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  const hide = () => {
+    splash.classList.add('out')
+    window.setTimeout(() => splash.remove(), 500)
+  }
+  splash.addEventListener('click', hide, { once: true })
+  window.setTimeout(hide, Math.max(0, (reduced ? 300 : 1800) - performance.now()))
+}

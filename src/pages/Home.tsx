@@ -8,6 +8,7 @@ import { HomePrayerArch } from '../components/HomePrayerArch'
 import { AdhkarCard, ContinueReadingCard, PrayerSoonCard, WirdCard } from '../components/HomeCards'
 import { useLocation } from '../lib/location'
 import { regionFor } from '../lib/prayer'
+import { useAccount } from '../lib/account'
 
 const quick = [
   { to: '/quraanka?tab=akhri', label: 'home.quick.read', Icon: BookIcon },
@@ -19,6 +20,7 @@ const quick = [
 export default function Home() {
   const now = new Date()
   const { fix } = useLocation()
+  const [acc] = useAccount()
   return (
     <>
       <header className="night relative overflow-hidden rounded-b-[36px] px-[18px] pt-[max(18px,env(safe-area-inset-top))] pb-6">
@@ -35,7 +37,7 @@ export default function Home() {
           <InstallButton />
         </div>
 
-        <p className="relative mt-5 mb-0.5 font-serif text-[15px] italic text-gold-soft">{t('home.greeting')}</p>
+        <p className="relative mt-5 mb-0.5 font-serif text-[15px] italic text-gold-soft">{t('home.greeting')}{acc ? `, ${acc.name.split(' ')[0]}` : ''}</p>
         <p className="relative m-0 font-serif text-[26px] font-semibold tracking-tight">{formatGregorian(now)}</p>
         <div className="relative mt-2.5 flex flex-wrap gap-1.5">
           <span className="inline-flex h-7 items-center gap-1.5 rounded-full border border-ivory/15 bg-ivory/10 px-3 text-xs font-bold">
@@ -67,6 +69,10 @@ export default function Home() {
             </Link>
           ))}
         </nav>
+        <Link to="/asturnaanta" className="mt-1 flex min-h-11 items-center justify-center gap-2 text-[12.5px] font-bold text-umber no-underline">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" /></svg>
+          {t('account.link')}
+        </Link>
       </main>
     </>
   )

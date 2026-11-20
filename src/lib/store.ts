@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
+import { isSyncKey } from './syncKeys'
 
-// All personal data (bookmarks, last-read, khatma progress, adhkar progress, preferences)
-// stays on the device in IndexedDB. No account, nothing sent anywhere.
+// Personal data (bookmarks, last-read, khatma progress, adhkar progress, preferences) is kept on the
+// device in IndexedDB. With an account, the keys in syncKeys.ts are also saved to the server (lib/sync.ts).
 // A tiny key-value wrapper is used instead of a library to keep the app's start-up small.
 
 const DB_NAME = 'diin'
@@ -55,13 +56,38 @@ export async function getItem<T>(key: string, fallback: T): Promise<T> {
   }
 }
 
-export async function setItem<T>(key: string, value: T): Promise<void> {
+// ---- change times for values saved to the account (newest change wins when phones sync) ----
+const STAMPS = '__stamps'
+let stamps: Promise<Record<string, number>> | null = null
+const loadStamps = () => (stamps ??= getItem<Record<string, number>>(STAMPS, {}))
+
+/** When each synced key last changed on this device (ms since epoch). */
+export const getStamps = () => loadStamps().then((s) => ({ ...s }))
+
+const localChange = new Set<(key: string) => void>()
+/** Called after the user changes a synced value on this device (not for values that came from the server). */
+export function onLocalChange(fn: (key: string) => void) {
+  localChange.add(fn)
+  return () => { localChange.delete(fn) }
+}
+
+/**
+ * Save a value. For synced keys the change time is recorded; `t` is given when the value
+ * comes from the server, so it keeps the server's time and is not sent back again.
+ */
+export async function setItem<T>(key: string, value: T, opts: { t?: number } = {}): Promise<void> {
   try {
     await run('readwrite', (s) => s.put(value, key))
+    if (isSyncKey(key)) {
+      const s = await loadStamps()
+      s[key] = opts.t ?? Date.now()
+      await run('readwrite', (st) => st.put(s, STAMPS))
+    }
   } catch {
     /* private mode / storage blocked: the app keeps working for this session */
   }
   listeners.get(key)?.forEach((fn) => fn(value))
+  if (opts.t === undefined && isSyncKey(key)) localChange.forEach((fn) => fn(key))
 }
 
 const listeners = new Map<string, Set<(v: unknown) => void>>()
@@ -104,7 +130,4 @@ export function useStored<T>(key: string, fallback: T): [T, (next: T | ((prev: T
   return [value, update, ready]
 }
 
-/** Local calendar day "2026-11-20". */
-export function todayISO(d = new Date()): string {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-}
+export { todayISO } from './day'

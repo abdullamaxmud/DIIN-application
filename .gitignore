@@ -34,3 +34,4 @@ public/data/hisn/
 .dev.vars
 *.vapid-private.json
 .vapid-private.json
+dist-local

@@ -1,5 +1,5 @@
 import type { QuranData } from './data'
-import { todayISO } from './store'
+import { todayISO } from './day'
 
 // ---------------- monthly wird (30 days = 1 juz a day) ----------------
 
