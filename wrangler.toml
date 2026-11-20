@@ -11,3 +11,5 @@ preview_urls = false
 directory = "./dist"
 # unknown paths (e.g. /quraanka, /adkaarta/27) get index.html so the app's router can show them
 not_found_handling = "single-page-application"
+# serve files exactly at their names (no /x.html -> /x redirect), e.g. Google's verification file
+html_handling = "none"
