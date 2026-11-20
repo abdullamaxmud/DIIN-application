@@ -9,6 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "icons": "node scripts/gen-icons.mjs",
+    "og": "node scripts/gen-og.mjs",
     "test": "vitest run",
     "data": "node scripts/build-data.mjs",
     "prebuild": "node scripts/build-data.mjs"

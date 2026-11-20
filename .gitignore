@@ -35,3 +35,4 @@ public/data/hisn/
 *.vapid-private.json
 .vapid-private.json
 dist-local
+# editor/assistant settings (not part of the app)

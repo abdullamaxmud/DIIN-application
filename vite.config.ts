@@ -27,6 +27,8 @@ export default defineConfig({
       filename: 'sw.ts',
       injectManifest: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        // the link-preview picture is only for other sites (WhatsApp, Google), not needed offline
+        globIgnores: ['og-image.png'],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
       },
       includeAssets: ['favicon.svg', 'icons/apple-touch-icon.png'],

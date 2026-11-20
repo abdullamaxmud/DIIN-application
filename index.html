@@ -6,10 +6,54 @@
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#071F19" />
-    <meta name="description" content="DIIN — Quraanka Kariimka ah, Adkaarta Xisnul Muslim, waqtiyada salaadda iyo qorshaha khatmiga, af-Soomaali." />
+    <title>DIIN — Quraanka, Adkaarta iyo Waqtiyada Salaadda | App Islaami ah oo af-Soomaali ah</title>
+    <meta name="description" content="DIIN waa app Islaami ah oo bilaash ah, af-Soomaali: Quraanka Kariimka ah (Xafs) oo tarjumaad Soomaali leh, dhageysi qaariyo badan, khatmi iyo wird, Adkaarta Xisnul Muslim oo tiriye leh, iyo waqtiyada salaadda." />
+    <meta name="application-name" content="DIIN" />
+    <meta name="apple-mobile-web-app-title" content="DIIN" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <title>DIIN</title>
+    <link rel="canonical" href="https://diin.diin-push.workers.dev/" />
+
+    <!-- link previews (WhatsApp, Facebook, Telegram, X) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="DIIN" />
+    <meta property="og:title" content="DIIN — Quraanka, Adkaarta iyo Waqtiyada Salaadda" />
+    <meta property="og:description" content="App Islaami ah oo bilaash ah, af-Soomaali: Quraan, dhageysi, khatmi, Adkaarta Xisnul Muslim iyo waqtiyada salaadda." />
+    <meta property="og:url" content="https://diin.diin-push.workers.dev/" />
+    <meta property="og:image" content="https://diin.diin-push.workers.dev/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="DIIN — Quraanka · Adkaarta · Salaadda, af-Soomaali, bilaash" />
+    <meta property="og:locale" content="so_SO" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- tells search engines the site's name is "DIIN" and that it is a free app -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://diin.diin-push.workers.dev/#website",
+            "name": "DIIN",
+            "alternateName": ["DIIN App", "Diin app Soomaali"],
+            "url": "https://diin.diin-push.workers.dev/",
+            "inLanguage": "so"
+          },
+          {
+            "@type": "WebApplication",
+            "name": "DIIN",
+            "url": "https://diin.diin-push.workers.dev/",
+            "description": "App Islaami ah oo bilaash ah, af-Soomaali: Quraanka Kariimka ah oo tarjumaad Soomaali leh, dhageysi, khatmi iyo wird, Adkaarta Xisnul Muslim iyo waqtiyada salaadda.",
+            "applicationCategory": "LifestyleApplication",
+            "operatingSystem": "Android, iOS, Web",
+            "inLanguage": "so",
+            "image": "https://diin.diin-push.workers.dev/og-image.png",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+          }
+        ]
+      }
+    </script>
     <style>
       /* opening animation: drawn by the browser before any script runs; removed by src/main.tsx */
       #splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
@@ -39,6 +83,11 @@
       <p class="h">Ku soo dhawow DIIN</p>
     </div>
     <div id="root"></div>
+    <noscript>
+      <h1>DIIN — Quraanka, Adkaarta iyo Waqtiyada Salaadda</h1>
+      <p>DIIN waa app Islaami ah oo bilaash ah oo af-Soomaali ah: Quraanka Kariimka ah (qoraalka Cuthmaani, Xafs) oo leh tarjumaadda Soomaaliga ee Mahmud Muhammad Abduh, dhageysi qaariyo badan, qorshaha khatmiga iyo wirdka, Adkaarta Xisnul Muslim oo tiriye leh, iyo waqtiyada salaadda ee goobtaada.</p>
+      <p>Fadlan shid JavaScript si aad u isticmaasho DIIN.</p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
