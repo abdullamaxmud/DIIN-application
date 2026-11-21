@@ -347,7 +347,7 @@
     "whoTitle": "Cidda arki karta",
     "who": "Adiga iyo maamulaha app-ka DIIN oo keliya. Xogtaada lama iibiyo, xayeysiisna looma isticmaalo.",
     "placeTitle": "Goobtaada",
-    "place": "Goobta saxda ah ee GPS-ka waxaa loo isticmaalaa waqtiyada salaadda oo keliya, mana laga diro taleefankaaga. Magaalada iyo wadanka waxaa laga garanayaa shabakadda internetka (Cloudflare).",
+    "place": "GPS-ka waxaa loo isticmaalaa waqtiyada salaadda oo keliya. Haddii aad daarto ogeysiisyada, goob la soo koobay (qiyaastii 1 km) ayaa server-ka loo diraa si ogeysiisku waqtiga saxda ah kuu soo gaaro. Magaalada iyo wadanka waxaa laga garanayaa shabakadda internetka (Cloudflare).",
     "deleteTitle": "Tirtiridda xogtaada",
     "deleteBody": "Mar kasta waad tirtiri kartaa akoonkaaga iyo xogtaada oo dhan.",
     "deleteBtn": "Tirtir akoonkayga",
