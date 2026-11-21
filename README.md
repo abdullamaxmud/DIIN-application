@@ -107,7 +107,7 @@ npm run deploy
 ## Akoonnada, kaydinta horumarka iyo Dashboard-ka
 
 - **Furitaanka:** animation-ka DIIN (index.html) ayaa soo baxa marka app-ka la furo.
-- **Qof cusub:** wuxuu arkaa "Ku soo dhawow DIIN" → **Ku gal Google** ama **Sii wad adigoo aan gelin** (magac kaliya).
+- **Gelitaanka:** qof kasta wuxuu ku galaa **Google** ama **email iyo password**. Email-ka waa in link-ga xaqiijinta la taabto ka hor inta aan app-ka la gelin.
 - **Kaydinta:** horumarka (wirdka, khatmiga, meesha akhriska, adkaarta, dookhyada) waxaa server-ka loo diraa 3 ilbiriqsi kadib isbeddel kasta. Qofka Google ku galay wuxuu dib ugu helayaa taleefan kasta.
 - **Siyaasadda Asturnaanta:** `/asturnaanta`. Qofku halkaas ayuu ka bixi karaa ama ka tirtiri karaa akoonkiisa.
 - **Dashboard-ka maamulaha:** `/admin`. Wuxuu muujiyaa booqdayaasha, inta soo degsatay, wadamada, qaybaha la isticmaalo iyo liiska dadka (magac, magaalo, horumar).
@@ -121,17 +121,13 @@ npx wrangler secret put ADMIN_KEY
 
 Qor fure adag (ugu yaraan 16 xaraf). Kadib fur `/admin` oo geli furahaas. Furaha waxaa lagu kaydiyaa Cloudflare oo keliya.
 
-### Gelitaanka Google (Client ID, bilaash)
-1. Fur **console.cloud.google.com** → samee project cusub (tusaale "DIIN").
-2. **Google Auth Platform → Branding**: magaca app-ka "DIIN", email-kaaga taageerada, iyo link-ga asturnaanta: `https://diin.diin-push.workers.dev/asturnaanta`.
-3. **Audience**: "External" → **Publish app**.
-4. **Clients → Create client → Web application** → *Authorized JavaScript origins*: `https://diin.diin-push.workers.dev` (iyo `http://localhost:5173` horumarinta).
-5. Koobi **Client ID**-ga (`….apps.googleusercontent.com`). Ma aha sir.
-6. Ku dar labadan meelood, kadib daabac labadaba:
-   - `.env.production` → `VITE_GOOGLE_CLIENT_ID=…`
-   - `worker/wrangler.toml` → `[vars]` → `GOOGLE_CLIENT_ID = "…"`
+### Gelitaanka (Firebase Authentication, bilaash)
+Project-ka Firebase waa `diin-eb366` (qorshaha Spark, kaar la'aan). Waxaa daaran **Email/Password** iyo **Google**, ciwaanka `diin.diin-push.workers.dev`-na waa la oggolaaday.
 
-Inta aan Client ID la gelin, badhanka Google waa la demiyaa, dadkuna magacooda ayay ku galaan.
+- Xogta Firebase ee website-ka waxay ku jirtaa `.env.production.local` (GitHub lama geliyo). Haddii aad kombiyuutar kale ka dhisayso, ka soo qaad **Firebase console → Project settings → Your apps** (eeg `.env.example`).
+- Server-ku wuxuu hubiyaa saxiixa Firebase, wuxuuna diidaa email aan la xaqiijin.
+- Haddii aad domain cusub qaadato, ku dar **Authentication → Settings → Authorised domains**.
+- Xadka bilaashka ah: 1,000 email xaqiijin ah iyo 150 dib-u-dejin password ah maalintii.
 
 ---
 
@@ -245,16 +241,16 @@ iPhone: push works only after "Add to Home Screen" (iOS 16.4+).
 ## Accounts, saved progress and the admin dashboard
 
 - **Opening animation:** inline in `index.html`, so it paints before any script; removed by `src/main.tsx` after 1.8 s, or on tap.
-- **Welcome gate:** a new user chooses **Sign in with Google** or **continue with a name** (guest).
+- **Sign-in gate:** everyone signs in with **Google** or a **verified email and password** (Firebase Authentication). Earlier guests are asked to connect an account, and their saved progress moves to it.
 - **Sync:** progress keys (`src/lib/syncKeys.ts`) carry change times. `src/components/AppServices.tsx` sends changes to `/api/sync` 3 s after an edit and on backgrounding, and pulls newer values on return. Per key, the newest change wins. Google users get their progress back on any device.
 - **Privacy page:** `/asturnaanta`, with sign-out and account deletion (`/api/me/delete`).
 - **Admin dashboard:** `/admin` shows visitors, installs, countries, section usage and a user list with progress. The password is the Worker secret `ADMIN_KEY` (`npx wrangler secret put ADMIN_KEY` in `worker/`).
-- **Google sign-in:**
-  - create an OAuth **Web** client in Google Cloud (Google Auth Platform);
-  - add the authorized JavaScript origin `https://diin.diin-push.workers.dev`;
-  - use `/asturnaanta` as the privacy policy URL;
-  - set the client id as `VITE_GOOGLE_CLIENT_ID` (`.env.production`) and `GOOGLE_CLIENT_ID` (`worker/wrangler.toml` vars), then redeploy both.
-  - The Worker verifies Google's RS256 signature, issuer, audience and expiry itself.
+- **Firebase Authentication:**
+  - project `diin-eb366` (Spark plan) with Email/Password and Google enabled;
+  - only `@firebase/app` and `@firebase/auth` are installed, loaded lazily on the sign-in and account screens;
+  - web config lives in `.env.production.local` (git-ignored; see `.env.example`), the Worker has `FIREBASE_PROJECT_ID`;
+  - the Worker verifies the RS256 signature, issuer, audience, times and `email_verified` before opening a session;
+  - add any new domain under Authentication → Settings → Authorised domains.
 - **Statistics:**
   - anonymous random device id, one ping per new section per day (`src/lib/track.ts`);
   - city and country come from Cloudflare's `request.cf`, not from GPS.

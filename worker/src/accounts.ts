@@ -16,14 +16,6 @@ export function cleanFeatures(f: unknown): Feature[] {
   return [...new Set(f.filter((x): x is Feature => (FEATURES as readonly unknown[]).includes(x)))]
 }
 
-/** A display name typed by a guest: trimmed, single spaces, no control characters, 1–40 characters. */
-export function cleanName(raw: unknown): string | null {
-  if (typeof raw !== 'string') return null
-  // eslint-disable-next-line no-control-regex
-  const s = raw.replace(/[\u0000-\u001f\u007f<>]/g, '').replace(/\s+/g, ' ').trim()
-  return s.length >= 1 && s.length <= 40 ? s : null
-}
-
 export interface CleanItem { value: string; t: number }
 
 /**
@@ -52,9 +44,6 @@ export function cleanItems(raw: unknown, now = Date.now()): Record<string, Clean
 export function newToken(): string {
   return [...crypto.getRandomValues(new Uint8Array(32))].map((b) => b.toString(16).padStart(2, '0')).join('')
 }
-
-/** Random id for a guest account. */
-export const newGuestId = () => 'd:' + newToken().slice(0, 24)
 
 /** Compare two equal-length hex strings without leaking where they differ. */
 export function sameHex(a: string, b: string): boolean {

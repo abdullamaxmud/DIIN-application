@@ -32,7 +32,7 @@ export async function applyServerItems(items: Items | undefined) {
 export interface SyncExtras { zone: string; platform: string; installed: boolean; push: boolean }
 
 export interface SyncReply {
-  user: { id: string; kind: 'google' | 'guest'; name: string; email: string | null }
+  user: { id: string; kind: 'google' | 'email' | 'guest'; name: string; email: string | null }
   items: Items
 }
 

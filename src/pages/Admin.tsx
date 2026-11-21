@@ -6,7 +6,7 @@ type Range = 'today' | 'week' | 'month'
 
 interface AdminUser {
   id: string
-  kind: 'google' | 'guest'
+  kind: 'google' | 'email' | 'guest'
   name: string
   email: string | null
   city: string | null
@@ -30,7 +30,7 @@ interface Stats {
   visitors: number
   active: number
   installed: number
-  accounts: Partial<Record<'google' | 'guest', number>>
+  accounts: Partial<Record<'google' | 'email' | 'guest', number>>
   push: number
   daily: { day: string; n: number }[]
   platforms: { platform: string | null; n: number }[]
@@ -127,12 +127,12 @@ export default function Admin() {
   const ctrMax = Math.max(1, ...stats.countries.map((c) => c.n))
   const feats = ['quran', 'listen', 'adhkar', 'prayer', 'khatma'].map((f) => ({ f, n: stats.features.find((x) => x.feature === f)?.n ?? 0 }))
   const featMax = Math.max(1, ...feats.map((x) => x.n))
-  const accTotal = (stats.accounts.google ?? 0) + (stats.accounts.guest ?? 0)
+  const accTotal = (stats.accounts.google ?? 0) + (stats.accounts.email ?? 0) + (stats.accounts.guest ?? 0)
   const kpis = [
     { label: t('admin.visitors'), value: stats.visitors, note: t(`admin.rangeNote.${stats.range}`) },
     { label: t('admin.active'), value: stats.active, note: t(`admin.rangeNote.${stats.range}`) },
     { label: t('admin.installed'), value: stats.installed, note: t('admin.installedNote') },
-    { label: t('admin.accounts'), value: accTotal, note: t('admin.accountsNote', { g: stats.accounts.google ?? 0, d: stats.accounts.guest ?? 0 }) },
+    { label: t('admin.accounts'), value: accTotal, note: t('admin.accountsNote', { g: stats.accounts.google ?? 0, e: stats.accounts.email ?? 0, d: stats.accounts.guest ?? 0 }) },
     { label: t('admin.push'), value: stats.push, note: t('admin.pushNote') },
   ]
   const card = 'rounded-[20px] border border-hair bg-paper p-[18px]'
@@ -254,7 +254,7 @@ export default function Admin() {
                     <tr key={u.id} className={`border-t border-[#EFE6D2] ${selected?.id === u.id ? 'bg-[#FBF5E2]' : ''}`}>
                       <td className="p-0"><button type="button" onClick={() => setSel(u.id)} className="min-h-12 w-full px-2.5 py-2 text-left text-[13px] font-extrabold text-emerald">{u.name}</button></td>
                       <td className="px-2.5 py-2">{place(u)}</td>
-                      <td className="px-2.5 py-2"><span className={`inline-flex h-6 items-center rounded-full px-2.5 text-xs font-extrabold ${u.kind === 'google' ? 'bg-[#EEF1E6] text-emerald' : 'bg-[#F3ECDC] text-[#5C4A10]'}`}>{t(`admin.via.${u.kind}`)}</span></td>
+                      <td className="px-2.5 py-2"><span className={`inline-flex h-6 items-center rounded-full px-2.5 text-xs font-extrabold ${u.kind === 'guest' ? 'bg-[#F3ECDC] text-[#5C4A10]' : 'bg-[#EEF1E6] text-emerald'}`}>{t(`admin.via.${u.kind}`)}</span></td>
                       <td className="min-w-[130px] px-2.5 py-2">
                         <div className="flex items-center gap-2"><span className="flex-1"><Bar value={u.progress.wird} max={30} gold={u.progress.wird >= 30} /></span><span className="font-bold whitespace-nowrap tabular-nums">{u.progress.wird}/30</span></div>
                       </td>

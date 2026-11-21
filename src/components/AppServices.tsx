@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useLocation as useRoute } from 'react-router-dom'
 import { ApiError, apiConfigured, isInstalled, platform } from '../lib/api'
-import { registerGuest, useAccount } from '../lib/account'
+import { useAccount } from '../lib/account'
 import { isSubscribed } from '../lib/push'
 import { onLocalChange, setItem } from '../lib/store'
 import { syncWith } from '../lib/sync'
@@ -32,11 +32,9 @@ export function AppServices() {
     let timer: number | undefined
 
     const run = async (only?: Set<string>, keepalive = false) => {
-      let a = accRef.current
-      if (!a) return
+      const a = accRef.current
+      if (!a?.token) return
       try {
-        if (!a.token && a.kind === 'guest') { a = await registerGuest(a); only = undefined }
-        if (!a.token) return
         const extras = { zone: Intl.DateTimeFormat().resolvedOptions().timeZone, platform: platform(), installed: isInstalled(), push: await isSubscribed() }
         const reply = await syncWith(a.token, extras, only, keepalive)
         if (reply.user.name !== a.name) await setItem('account', { ...a, name: reply.user.name })

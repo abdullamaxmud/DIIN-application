@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { cleanFeatures, cleanItems, cleanName, cleanPlatform, MAX_ITEM, sameHex, validDevice } from './accounts'
-import { checkClaims, verifyGoogleToken } from './google'
+import { cleanFeatures, cleanItems, cleanPlatform, MAX_ITEM, sameHex, validDevice } from './accounts'
+import { checkClaims, verifyFirebaseToken } from './firebase'
 import { summarize } from './stats'
 
 const b64url = (bytes: Uint8Array | string) => {
@@ -27,13 +27,6 @@ describe('input cleaning', () => {
     const items = Object.fromEntries(['wird.done', 'quran.last', 'quran.bookmark', 'khatma.plan', 'adhkar.done', 'notify.prefs', 'audio.reciter', 'quran.theme'].map((k) => [k, { v: big, t: 1 }]))
     expect(cleanItems(items)).toBeNull()
   })
-  it('cleans guest names', () => {
-    expect(cleanName('  Cabdi   Xasan ')).toBe('Cabdi Xasan')
-    expect(cleanName('<b>Axmed</b>')).toBe('bAxmed/b')
-    expect(cleanName('')).toBeNull()
-    expect(cleanName('a'.repeat(41))).toBeNull()
-    expect(cleanName(42)).toBeNull()
-  })
   it('checks device ids, platforms and sections', () => {
     expect(validDevice('k3j4h5g6f7d8s9a0-x1')).toBe(true)
     expect(validDevice('short')).toBe(false)
@@ -49,35 +42,47 @@ describe('input cleaning', () => {
   })
 })
 
-describe('Google sign-in token', () => {
-  const CLIENT = '123-test.apps.googleusercontent.com'
+describe('Firebase sign-in token', () => {
+  const PROJECT = 'diin-test'
+  const NOW = 1_900_000_000
 
   async function signedToken(claims: Record<string, unknown>, kid = 'k1') {
     const pair = await crypto.subtle.generateKey({ name: 'RSASSA-PKCS1-v1_5', modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' }, true, ['sign', 'verify']) as CryptoKeyPair
-    const jwk = { ...(await crypto.subtle.exportKey('jwk', pair.publicKey)), kid }
+    const jwk = { ...((await crypto.subtle.exportKey('jwk', pair.publicKey)) as JsonWebKey), kid }
     const head = b64url(JSON.stringify({ alg: 'RS256', kid, typ: 'JWT' }))
     const body = b64url(JSON.stringify(claims))
     const sig = new Uint8Array(await crypto.subtle.sign('RSASSA-PKCS1-v1_5', pair.privateKey, new TextEncoder().encode(`${head}.${body}`)))
     return { token: `${head}.${body}.${b64url(sig)}`, keys: [jwk] }
   }
-  const good = { iss: 'https://accounts.google.com', aud: CLIENT, sub: '1098', name: 'Cabdi Xasan', email: 'c@example.com', email_verified: true, exp: 2_000_000_000 }
+  const good = {
+    iss: `https://securetoken.google.com/${PROJECT}`, aud: PROJECT, sub: 'uid1', name: 'Cabdi Xasan', email: 'c@example.com',
+    email_verified: true, iat: NOW - 10, auth_time: NOW - 10, exp: NOW + 3600, firebase: { sign_in_provider: 'password' },
+  }
 
-  it('accepts a correctly signed token for our app', async () => {
+  it('accepts a correctly signed token with a verified email', async () => {
     const { token, keys } = await signedToken(good)
-    expect(await verifyGoogleToken(token, CLIENT, keys, 1_900_000_000)).toEqual({ sub: '1098', name: 'Cabdi Xasan', email: 'c@example.com' })
+    expect(await verifyFirebaseToken(token, PROJECT, keys, NOW)).toEqual({ uid: 'uid1', name: 'Cabdi Xasan', email: 'c@example.com', kind: 'email' })
+  })
+  it('recognises Google sign-in', () => {
+    expect(checkClaims({ ...good, firebase: { sign_in_provider: 'google.com' } }, PROJECT, NOW).kind).toBe('google')
+  })
+  it('refuses an email that has not been verified', async () => {
+    const { token, keys } = await signedToken({ ...good, email_verified: false })
+    await expect(verifyFirebaseToken(token, PROJECT, keys, NOW)).rejects.toThrow('email-not-verified')
   })
   it('rejects a token whose content was changed after signing', async () => {
-    const { token, keys } = await signedToken(good)
+    const { token, keys } = await signedToken({ ...good, email_verified: false })
     const [h, , s] = token.split('.')
-    const forged = `${h}.${b64url(JSON.stringify({ ...good, sub: 'someone-else' }))}.${s}`
-    await expect(verifyGoogleToken(forged, CLIENT, keys, 1_900_000_000)).rejects.toThrow('signature')
+    const forged = `${h}.${b64url(JSON.stringify(good))}.${s}`
+    await expect(verifyFirebaseToken(forged, PROJECT, keys, NOW)).rejects.toThrow('signature')
   })
-  it('rejects tokens for another app, expired tokens and unknown keys', async () => {
+  it('rejects other projects, expired tokens, unknown keys and other providers', async () => {
     const { token, keys } = await signedToken(good)
-    await expect(verifyGoogleToken(token, 'other-app', keys, 1_900_000_000)).rejects.toThrow('audience')
-    await expect(verifyGoogleToken(token, CLIENT, keys, 2_100_000_000)).rejects.toThrow('expired')
-    await expect(verifyGoogleToken(token, CLIENT, [{ ...keys[0], kid: 'k2' }], 1_900_000_000)).rejects.toThrow('kid')
-    expect(() => checkClaims({ ...good, iss: 'evil.com' }, CLIENT, 1_900_000_000)).toThrow('issuer')
+    await expect(verifyFirebaseToken(token, 'other-project', keys, NOW)).rejects.toThrow('audience')
+    await expect(verifyFirebaseToken(token, PROJECT, keys, NOW + 7200)).rejects.toThrow('expired')
+    await expect(verifyFirebaseToken(token, PROJECT, [{ ...keys[0], kid: 'k2' }], NOW)).rejects.toThrow('kid')
+    expect(() => checkClaims({ ...good, iss: 'https://evil.example' }, PROJECT, NOW)).toThrow('issuer')
+    expect(() => checkClaims({ ...good, firebase: { sign_in_provider: 'anonymous' } }, PROJECT, NOW)).toThrow('provider')
   })
 })
 

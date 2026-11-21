@@ -1,7 +1,7 @@
 import { buildPushHTTPRequest } from '@pushforge/builder'
 import { dueNotifications, parsePrefs, type Due, type Subscriber } from './schedule'
-import { cleanFeatures, cleanItems, cleanName, cleanPlatform, newGuestId, newToken, sameHex, validDevice } from './accounts'
-import { googleKeys, verifyGoogleToken } from './google'
+import { cleanFeatures, cleanItems, cleanPlatform, newToken, sameHex, validDevice } from './accounts'
+import { firebaseKeys, verifyFirebaseToken, type FirebaseUser } from './firebase'
 import { summarize } from './stats'
 import { SYNC_KEYS } from '../../src/lib/syncKeys'
 
@@ -10,8 +10,8 @@ export interface Env {
   ALLOWED_ORIGIN: string
   ADMIN_CONTACT: string
   VAPID_PRIVATE_JWK: string
-  /** OAuth client id of "Sign in with Google" (public; a var in wrangler.toml) */
-  GOOGLE_CLIENT_ID?: string
+  /** Firebase project that signs users in (public; a var in wrangler.toml) */
+  FIREBASE_PROJECT_ID?: string
   /** password for the /admin dashboard (secret: `npx wrangler secret put ADMIN_KEY`) */
   ADMIN_KEY?: string
 }
@@ -30,7 +30,7 @@ interface Row {
 
 interface UserRow {
   id: string
-  kind: 'google' | 'guest'
+  kind: 'google' | 'email' | 'guest'
   name: string
   email: string | null
   city: string | null
@@ -136,27 +136,43 @@ async function ping({ req, env, body, ok }: Ctx) {
   return ok({ ok: true })
 }
 
-async function guestLogin({ req, env, body, ok }: Ctx) {
-  const name = cleanName(body.name)
-  if (!name) return ok({ error: 'name' }, 400)
+/**
+ * Exchange a Firebase ID token for a DIIN session. Only a verified email gets in.
+ * A former guest's saved progress is moved to the new account (newest change per key wins).
+ */
+async function firebaseLogin({ req, env, body, ok }: Ctx) {
+  if (!env.FIREBASE_PROJECT_ID) return ok({ error: 'auth-not-configured' }, 503)
+  if (typeof body.idToken !== 'string' || body.idToken.length > 4096) return ok({ error: 'token' }, 400)
+  let keys
+  try { keys = await firebaseKeys() } catch { return ok({ error: 'auth-unavailable' }, 503) }
+  let u: FirebaseUser
+  try {
+    u = await verifyFirebaseToken(body.idToken, env.FIREBASE_PROJECT_ID, keys)
+  } catch (e) {
+    return e instanceof Error && e.message === 'email-not-verified' ? ok({ error: 'email-not-verified' }, 403) : ok({ error: 'token' }, 401)
+  }
   const { city, country } = place(req)
-  const id = newGuestId()
-  await env.DB.prepare('INSERT INTO users (id, kind, name, city, country) VALUES (?, ?, ?, ?, ?)').bind(id, 'guest', name, city, country).run()
-  return ok({ token: await startSession(env, id), user: { id, kind: 'guest', name, email: null }, items: {} })
-}
-
-async function googleLogin({ req, env, body, ok }: Ctx) {
-  if (!env.GOOGLE_CLIENT_ID) return ok({ error: 'google-not-configured' }, 503)
-  if (typeof body.credential !== 'string' || body.credential.length > 4096) return ok({ error: 'credential' }, 400)
-  let g
-  try { g = await verifyGoogleToken(body.credential, env.GOOGLE_CLIENT_ID, await googleKeys()) } catch { return ok({ error: 'google' }, 401) }
-  const { city, country } = place(req)
-  const id = 'g:' + g.sub
+  const id = 'f:' + u.uid
   await env.DB.prepare(
-    `INSERT INTO users (id, kind, name, email, city, country) VALUES (?1, 'google', ?2, ?3, ?4, ?5)
-     ON CONFLICT(id) DO UPDATE SET name = ?2, email = ?3, city = COALESCE(?4, city), country = COALESCE(?5, country), last_seen = datetime('now')`,
-  ).bind(id, g.name, g.email, city, country).run()
-  return ok({ token: await startSession(env, id), user: { id, kind: 'google', name: g.name, email: g.email }, items: await progressOf(env, id) })
+    `INSERT INTO users (id, kind, name, email, city, country) VALUES (?1, ?2, ?3, ?4, ?5, ?6)
+     ON CONFLICT(id) DO UPDATE SET kind = ?2, name = ?3, email = ?4, city = COALESCE(?5, city), country = COALESCE(?6, country), last_seen = datetime('now')`,
+  ).bind(id, u.kind, u.name, u.email, city, country).run()
+
+  if (typeof body.guestToken === 'string' && body.guestToken.length <= 128) {
+    const row = await env.DB.prepare('SELECT user_id FROM sessions WHERE token_hash = ?').bind(await sha256(body.guestToken)).first<{ user_id: string }>()
+    if (row?.user_id.startsWith('d:')) {
+      await env.DB.batch([
+        env.DB.prepare(
+          `INSERT INTO progress (user_id, key, value, t) SELECT ?1, key, value, t FROM progress WHERE user_id = ?2
+           ON CONFLICT(user_id, key) DO UPDATE SET value = excluded.value, t = excluded.t WHERE excluded.t > progress.t`,
+        ).bind(id, row.user_id),
+        env.DB.prepare('DELETE FROM progress WHERE user_id = ?').bind(row.user_id),
+        env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(row.user_id),
+        env.DB.prepare('DELETE FROM users WHERE id = ?').bind(row.user_id),
+      ])
+    }
+  }
+  return ok({ token: await startSession(env, id), user: { id, kind: u.kind, name: u.name, email: u.email }, items: await progressOf(env, id) })
 }
 
 /** Save the app's changed progress (newest change per key wins) and return everything saved. */
@@ -275,8 +291,7 @@ export default {
 
     switch (url.pathname) {
       case '/api/ping': return ping(ctx)
-      case '/api/auth/guest': return guestLogin(ctx)
-      case '/api/auth/google': return googleLogin(ctx)
+      case '/api/auth/firebase': return firebaseLogin(ctx)
       case '/api/auth/logout': return logout(ctx)
       case '/api/sync': return syncProgress(ctx)
       case '/api/me/delete': return deleteMe(ctx)

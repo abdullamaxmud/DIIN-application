@@ -1,69 +1,84 @@
 import { api, ApiError, apiConfigured } from './api'
-import { setItem, useStored } from './store'
+import { getItem, removeItems, setItem, useStored } from './store'
 import { applyServerItems, type Items } from './sync'
+import { SYNC_KEYS } from './syncKeys'
 
-/** The person using the app. `token` is null for a guest whose registration has not reached the server yet. */
+/**
+ * The person using the app. New accounts are 'google' or 'email' (always a verified address).
+ * 'guest' only exists for people who started before accounts were required.
+ */
 export interface Account {
   id: string | null
-  kind: 'google' | 'guest'
+  kind: 'google' | 'email' | 'guest'
   name: string
   email: string | null
   token: string | null
 }
 
-export const GOOGLE_CLIENT_ID = (import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined) ?? ''
-export const googleConfigured = () => !!GOOGLE_CLIENT_ID && apiConfigured()
+export const firebaseConfigured = () =>
+  !!import.meta.env.VITE_FIREBASE_API_KEY && !!import.meta.env.VITE_FIREBASE_APP_ID && apiConfigured()
 
 export const useAccount = () => useStored<Account | null>('account', null)
 
+/** Does this account have to go through the sign-in screen? (Old guests can still use the app offline.) */
+export function needsSignIn(acc: Account | null, online = navigator.onLine) {
+  if (!acc) return true
+  if (acc.kind === 'guest') return online
+  return !acc.token
+}
+
 interface LoginReply {
   token: string
-  user: { id: string; kind: 'google' | 'guest'; name: string; email: string | null }
+  user: { id: string; kind: 'google' | 'email'; name: string; email: string | null }
   items: Items
 }
 
-const fromReply = (r: LoginReply): Account => ({ id: r.user.id, kind: r.user.kind, name: r.user.name, email: r.user.email, token: r.token })
+export const loadAuth = () => import('./firebaseAuth')
 
-/** Guest: just a name. Works offline too — the server registration is retried later by the sync. */
-export async function loginGuest(name: string): Promise<Account> {
-  let acc: Account = { id: null, kind: 'guest', name, email: null, token: null }
-  if (apiConfigured()) {
-    try { acc = fromReply(await api<LoginReply>('/api/auth/guest', { name })) } catch { /* offline: keep local guest */ }
-  }
-  await setItem('account', acc)
-  return acc
-}
+/** Firebase has confirmed who this is: open a DIIN session and restore their saved progress. */
+export async function completeSignIn(): Promise<Account> {
+  const fb = await loadAuth()
+  const prev = await getItem<Account | null>('account', null)
+  const r = await api<LoginReply>('/api/auth/firebase', {
+    idToken: await fb.freshIdToken(),
+    guestToken: prev?.kind === 'guest' ? prev.token : undefined,
+  })
 
-/** Google: `credential` is the ID token from Google's sign-in button. Restores progress saved earlier. */
-export async function loginGoogle(credential: string): Promise<Account> {
-  const r = await api<LoginReply>('/api/auth/google', { credential })
+  // another person signing in on this phone must not inherit the previous person's progress
+  const owner = await getItem<string | null>('account.owner', null)
+  if (owner && owner !== r.user.id && prev?.kind !== 'guest') await removeItems(SYNC_KEYS)
+
   await applyServerItems(r.items)
-  const acc = fromReply(r)
+  await setItem('account.owner', r.user.id)
+  const acc: Account = { id: r.user.id, kind: r.user.kind, name: r.user.name, email: r.user.email, token: r.token }
   await setItem('account', acc)
   return acc
 }
 
-/** Register a guest that was created offline (called by the sync). */
-export async function registerGuest(acc: Account): Promise<Account> {
-  const r = await api<LoginReply>('/api/auth/guest', { name: acc.name })
-  const next = fromReply(r)
-  await setItem('account', next)
-  return next
-}
-
-/** Leaves the account on this phone; progress stays on the device. */
+/** Leaves the account on this phone. */
 export async function signOut(acc: Account) {
   if (acc.token) await api('/api/auth/logout', {}, acc.token).catch(() => {})
+  if (acc.kind !== 'guest' && firebaseConfigured()) {
+    try { await (await loadAuth()).signOutFirebase() } catch { /* already signed out */ }
+  }
   await setItem('account', null)
 }
 
-/** Deletes the account and everything saved on the server. */
-export async function deleteAccount(acc: Account) {
+/**
+ * Deletes the account, everything saved on the server and this phone's copy.
+ * Firebase requires a recent login first, so email users may need to enter their password.
+ */
+export async function deleteAccount(acc: Account, password?: string) {
+  const fb = acc.kind === 'guest' ? null : await loadAuth()
+  if (fb) await fb.confirmIdentity(acc.kind as 'google' | 'email', acc.id, acc.email, password)
+
   if (acc.token) {
     try { await api('/api/me/delete', {}, acc.token) } catch (e) {
       // already gone on the server: fine
       if (!(e instanceof ApiError && e.status === 401)) throw e
     }
   }
+  if (fb) await fb.deleteFirebaseUser()
+  await removeItems([...SYNC_KEYS, 'account.owner'])
   await setItem('account', null)
 }

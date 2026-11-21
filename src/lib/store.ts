@@ -90,6 +90,23 @@ export async function setItem<T>(key: string, value: T, opts: { t?: number } = {
   if (opts.t === undefined && isSyncKey(key)) localChange.forEach((fn) => fn(key))
 }
 
+const REMOVED = Symbol('removed')
+
+/** Delete stored values; screens using them go back to their defaults. */
+export async function removeItems(keys: readonly string[]) {
+  try {
+    const s = await loadStamps()
+    for (const key of keys) {
+      await run('readwrite', (st) => st.delete(key))
+      delete s[key]
+    }
+    await run('readwrite', (st) => st.put(s, STAMPS))
+  } catch {
+    /* storage blocked: nothing was kept anyway */
+  }
+  for (const key of keys) listeners.get(key)?.forEach((fn) => fn(REMOVED))
+}
+
 const listeners = new Map<string, Set<(v: unknown) => void>>()
 
 /**
@@ -105,7 +122,7 @@ export function useStored<T>(key: string, fallback: T): [T, (next: T | ((prev: T
     getItem(key, fallback).then((v) => {
       if (alive) { setValue(v); setReady(true) }
     })
-    const fn = (v: unknown) => setValue(v as T)
+    const fn = (v: unknown) => setValue(v === REMOVED ? fallback : (v as T))
     if (!listeners.has(key)) listeners.set(key, new Set())
     listeners.get(key)!.add(fn)
     return () => {

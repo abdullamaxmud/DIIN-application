@@ -315,29 +315,57 @@
   "welcome": {
     "title": "Ku soo dhawow DIIN",
     "tagline": "Quraanka · Adkaarta · Salaadda",
-    "body": "Ku gal si horumarkaaga — khatmiga, wirdka iyo adkaarta — uusan u lumin, oo aad ugu sii wadato taleefan kasta.",
-    "saved": "Horumarkaagu waa kaydsan yahay",
-    "anyPhone": "Ka sii wad taleefan kasta",
-    "google": "Ku gal Google",
-    "googleSoon": "Gelitaanka Google dhawaan ayuu shaqayn doonaa. Hadda ku sii wad magacaaga.",
-    "googleFail": "Gelitaanka Google ma suurtagelin. Isku day mar kale.",
-    "guest": "Sii wad adigoo aan gelin",
+    "body": "Gal akoonkaaga si horumarkaaga, khatmiga, wirdka iyo adkaarta, uusan u lumin, oo aad uga sii wadato taleefan kasta.",
+    "guestUpgrade": "Ku xir akoon si horumarkaagii hore loogu kaydiyo. Waxba kaa lumi maayaan.",
+    "tabsLabel": "Gal ama samee akoon",
+    "signIn": "Gal",
+    "signUp": "Samee akoon",
+    "google": "Ku sii wad Google",
+    "or": "ama",
     "nameLabel": "Magacaaga",
-    "namePlaceholder": "Tusaale: Cabdullaahi",
-    "nameNeeded": "Fadlan qor magacaaga.",
-    "guestNote": "Horumarkaagu wuxuu ku jiri doonaa taleefankan oo keliya. Mar kasta waad ku geli kartaa Google si aad u kaydiso.",
-    "start": "Bilow",
-    "busy": "Waa la diyaarinayaa…",
+    "namePlaceholder": "Tusaale: Cabdullaahi Xasan",
+    "emailLabel": "Email",
+    "emailPlaceholder": "magacaaga@gmail.com",
+    "passwordLabel": "Password",
+    "passwordNew": "Samee password (ugu yaraan 8 xaraf)",
+    "passwordNote": "Samee password cusub oo DIIN u gaar ah. Ha isticmaalin password-ka Gmail-kaaga.",
+    "showPassword": "Muuji password-ka",
+    "hidePassword": "Qari password-ka",
+    "forgot": "Ma ilowday password-ka?",
+    "submitSignIn": "Gal akoonkaaga",
+    "submitSignUp": "Samee akoon",
+    "busy": "Waa la hubinayaa…",
     "back": "Dib u noqo",
     "privacy": "Siyaasadda Asturnaanta",
-    "skip": "Taabo si aad u gudubto"
+    "notConfigured": "Gelitaanka weli lama diyaarin. Fadlan mar dambe isku day.",
+    "offline": "Internet ayaa loo baahan yahay marka ugu horreysa ee aad gasho.",
+    "forgotTitle": "Dib u deji password-ka",
+    "forgotBody": "Geli email-kaaga, waxaan kuu soo diraynaa link aad password cusub ku samayso.",
+    "forgotSubmit": "Ii soo dir link-ga",
+    "forgotSent": "Haddii email-kan akoon leeyahay, link ayaa loo diray. Eeg sanduuqaaga iyo Spam.",
+    "verifyTitle": "Xaqiiji email-kaaga",
+    "verifyBody": "Link ayaan u dirnay:",
+    "verifySteps": [
+      "Fur email-kaaga",
+      "Taabo link-ga xaqiijinta",
+      "Ku soo laabo halkan, si toos ah ayaad u galaysaa"
+    ],
+    "verifyUnsent": "Email-kan weli lama xaqiijin. Haddii aadan helin link-ga, taabo “Dib u dir”.",
+    "verifySpam": "Ma arkin? Eeg galka Spam ama Junk.",
+    "verifyWaiting": "Waxaan sugaynaa xaqiijintaada…",
+    "verifyCheck": "Waan xaqiijiyay",
+    "verifyNotYet": "Weli lama xaqiijin. Fadlan marka hore taabo link-ga ku jira email-ka.",
+    "resend": "Dib u dir email-ka",
+    "resendIn": "Dib u dir ({n}s)",
+    "resent": "Email cusub ayaa la diray.",
+    "otherEmail": "Isticmaal email kale"
   },
   "privacy": {
     "title": "Siyaasadda Asturnaanta",
     "subtitle": "Waxa aan kaydinno iyo sababta",
     "whatTitle": "Xogta aan kaydinno",
     "what": [
-      "Magacaaga (iyo email-kaaga haddii aad ku gasho Google)",
+      "Magacaaga iyo email-kaaga",
       "Magaaladaada iyo wadankaaga",
       "Horumarkaaga: khatmiga, wirdka, meesha akhriska, adkaarta",
       "Dookhyada ogeysiisyada"
@@ -353,16 +381,20 @@
     "deleteBtn": "Tirtir akoonkayga",
     "deleteConfirm": "Ma hubtaa? Akoonkaaga iyo horumarka la kaydiyay waa la tirtirayaa, dibna looma soo celin karo.",
     "deleted": "Akoonkaaga waa la tirtiray.",
-    "deleteFail": "Tirtiriddu ma suurtagelin. Hubi internetka, kadib isku day mar kale."
+    "deleteFail": "Tirtiriddu ma suurtagelin. Hubi internetka, kadib isku day mar kale.",
+    "passwordTitle": "Password-kaaga",
+    "password": "Gelitaanka waxaa maamula Firebase (Google). DIIN iyo maamulaheedu ma arkaan password-kaaga.",
+    "deletePassword": "Si aad u xaqiijiso inaad adigu tahay, geli password-kaaga",
+    "deleteAgain": "Xaqiiji oo tirtir"
   },
   "account": {
     "title": "Akoonkaaga",
     "signedInGoogle": "Waxaad ku gashay Google",
-    "guest": "Marti (taleefankan oo keliya)",
+    "guest": "Marti (akoon la’aan)",
     "signOut": "Ka bax",
-    "signOutConfirm": "Ma hubtaa inaad ka baxayso? Horumarkaagu wuu ku jirayaa taleefankan.",
+    "signOutConfirm": "Ma hubtaa inaad ka baxayso? Horumarkaagu wuu kaydsan yahay, marka aad dib u gashana waad helaysaa.",
     "link": "Akoonkaaga & Asturnaanta",
-    "connectGoogle": "Ku xir Google si aad u kaydiso"
+    "signedInEmail": "Waxaad ku gashay email"
   },
   "admin": {
     "title": "Dashboard-ka Maamulaha",
@@ -390,7 +422,7 @@
     "installed": "Soo degsaday",
     "installedNote": "wadarta",
     "accounts": "Akoon leh",
-    "accountsNote": "Google {g} · martida {d}",
+    "accountsNote": "Google {g} · email {e} · martida {d}",
     "push": "Ogeysiisyada",
     "pushNote": "oggolaaday",
     "daily": "Booqdayaasha maalinlaha ah",
@@ -413,6 +445,7 @@
     "colLast": "Markii u dambeysay",
     "via": {
       "google": "Google",
+      "email": "Email",
       "guest": "Martida"
     },
     "detail": "Faahfaahin",
@@ -483,5 +516,22 @@
     "MY": "Malaysia",
     "ZA": "Koonfur Afrika"
   },
-  "_review": "Erayada Soomaaliga waxaa qoray AI; waa in uu dib u eego qof af-Soomaali ku hadla ka hor daabacaadda."
+  "_review": "Erayada Soomaaliga waxaa qoray AI; waa in uu dib u eego qof af-Soomaali ku hadla ka hor daabacaadda.",
+  "auth": {
+    "needName": "Fadlan qor magacaaga.",
+    "needEmail": "Fadlan qor email sax ah.",
+    "needPassword": "Fadlan qor password-kaaga.",
+    "shortPassword": "Password-ku waa inuu ahaadaa ugu yaraan 8 xaraf.",
+    "wrongCredentials": "Email-ka ama password-ka waa khaldan yahay.",
+    "invalidEmail": "Email-kan sax ma aha.",
+    "emailTaken": "Email-kan hore ayaa akoon loogu sameeyay. Taabo “Gal”.",
+    "weakPassword": "Password-kan waa daciif. Dooro mid ka adag.",
+    "tooMany": "Isku day badan ayaa dhacay. Fadlan sug dhowr daqiiqo.",
+    "network": "Internet-ka hubi, kadib isku day mar kale.",
+    "popupBlocked": "Browser-ku wuxuu xiray daaqadda Google. U oggolow, kadib isku day mar kale.",
+    "otherMethod": "Email-kan wuxuu ku xiran yahay hab kale oo gelitaan. Isku day habka aad hore u isticmaashay.",
+    "disabled": "Akoonkan waa la joojiyay.",
+    "mismatch": "Akoon kale ayaad gashay. Fadlan isticmaal akoonkaaga saxda ah.",
+    "generic": "Wax khalad ah ayaa dhacay. Fadlan isku day mar kale."
+  }
 }

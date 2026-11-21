@@ -5,7 +5,7 @@ import { LocationProvider } from './lib/location'
 import { PlayerProvider } from './lib/player'
 import { NotifySync } from './components/NotifySync'
 import { AppServices } from './components/AppServices'
-import { useAccount } from './lib/account'
+import { needsSignIn, useAccount } from './lib/account'
 import Home from './pages/Home'
 import Welcome from './pages/Welcome'
 import { UpdateBanner } from './components/UpdateBanner'
@@ -48,12 +48,12 @@ const Loading = () => <p role="status" className="m-0 py-16 text-center text-sm 
 /** Pages anyone can open without choosing Google / a name first. */
 const OPEN = ['/asturnaanta', '/admin']
 
-/** New users first see the welcome screen (sign in with Google, or continue with a name). */
+/** Everyone signs in first, with Google or a verified email. */
 function Gate({ children }: { children: ReactNode }) {
   const [acc, , ready] = useAccount()
   const { pathname } = useRoute()
   if (!ready) return null
-  if (!acc && !OPEN.includes(pathname)) return <Welcome />
+  if (needsSignIn(acc) && !OPEN.includes(pathname)) return <Welcome />
   return <>{children}</>
 }
 
