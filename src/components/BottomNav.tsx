@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { t } from '../i18n'
 import { BeadsIcon, BookIcon, HomeIcon, MosqueIcon } from './Icons'
 
@@ -11,6 +11,7 @@ const items = [
 
 /** Floating dark pill navigation with a gold dot under the active tab. */
 export function BottomNav() {
+  const { pathname } = useLocation()
   return (
     <nav
       aria-label={t('nav.label')}
@@ -24,7 +25,7 @@ export function BottomNav() {
             end={end}
             className={({ isActive }) =>
               `relative flex min-h-12 min-w-16 flex-col items-center justify-center gap-0.5 text-[10.5px] font-bold tracking-wide no-underline ${
-                isActive ? 'text-gold-soft after:absolute after:bottom-0.5 after:h-1 after:w-1 after:rounded-full after:bg-gold' : 'text-[#9DB7AC]'
+                isActive || (to === '/salaadda' && pathname.startsWith('/qiblada')) ? 'text-gold-soft after:absolute after:bottom-0.5 after:h-1 after:w-1 after:rounded-full after:bg-gold' : 'text-[#9DB7AC]'
               }`
             }
           >

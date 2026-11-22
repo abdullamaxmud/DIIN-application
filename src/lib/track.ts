@@ -12,7 +12,7 @@ export function featureFor(pathname: string, search = ''): Feature | null {
     return tab === 'dhageyso' ? 'listen' : tab === 'akhri' ? 'quran' : 'khatma'
   }
   if (pathname.startsWith('/adkaarta')) return 'adhkar'
-  if (pathname.startsWith('/salaadda')) return 'prayer'
+  if (pathname.startsWith('/salaadda') || pathname.startsWith('/qiblada')) return 'prayer'
   if (pathname.startsWith('/khatmiga')) return 'khatma'
   return null
 }

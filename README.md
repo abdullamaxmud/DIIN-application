@@ -2,7 +2,7 @@
 
 **Af-Soomaali** · [English below](#english)
 
-DIIN waa app bilaash ah (PWA) oo leh: Quraanka (qoraalka Cuthmaani – Xafs, tarjumaadda Soomaaliga iyo codka shuyuukh badan), Khatmi / Wird, Adkaarta Xisnul Muslim oo leh tiriye, waqtiyada salaadda (GPS) iyo ogeysiisyo dhab ah (Web Push).
+DIIN waa app bilaash ah (PWA) oo leh: Quraanka (qoraalka Cuthmaani – Xafs, tarjumaadda Soomaaliga iyo codka shuyuukh badan), Khatmi / Wird, Adkaarta Xisnul Muslim oo leh tiriye, waqtiyada salaadda (GPS), jihada Qiblada iyo ogeysiisyo dhab ah (Web Push).
 
 ---
 
@@ -18,6 +18,7 @@ Wax kasta oo diini ah waxaa laga soo qaaday il la xaqiijiyay. **Waxba lama tarju
 | Adkaarta (Carabi + tirada) | Xisnul Muslim, Saciid bin Cali bin Wahf Al-Qaxdaani — hisnmuslim.com (API-ga rasmiga ah) |
 | Macnaha adkaarta (Soomaali) + tixraacyada | "Xisnul Muslim – Dhufeyska Muslinka" (islamic-invitation.com), lagu xiray lambarka Xisnul Muslim |
 | Waqtiyada salaadda | Adhan.js (xisaab offline). Soomaaliya / Afrika = Egyptian General Authority |
+| Jihada Qiblada | Adhan.js iyo GPS; compass-ka waxaa lagu saxaa World Magnetic Model 2025 (Waqooyiga dhabta ah) |
 
 Xogta asalka ah waxay ku jirtaa `data/quran.json` iyo `data/hisn.json`. `npm run build` ayaa si toos ah uga dhisa `public/data/` (faylal yaryar oo suurad kasta iyo cutub kasta gaar u ah).
 
@@ -172,7 +173,7 @@ worker/          Cloudflare Worker + D1 + cron (ogeysiisyada)
 <a id="english"></a>
 # DIIN — English
 
-DIIN is a free PWA: Quran (Uthmani Hafs text, Somali translation, many reciters), Khatma / daily Wird planner, Hisn al-Muslim adhkar with a counter, GPS-based prayer times and real Web Push notifications. The whole UI is in Somali; Arabic appears only in Quran and adhkar text.
+DIIN is a free PWA: Quran (Uthmani Hafs text, Somali translation, many reciters), Khatma / daily Wird planner, Hisn al-Muslim adhkar with a counter, GPS-based prayer times, a Qibla compass and real Web Push notifications. The whole UI is in Somali; Arabic appears only in Quran and adhkar text.
 
 ## Sources
 
@@ -186,6 +187,7 @@ Every religious text comes from a verified source. **Nothing was translated or g
 | Adhkar (Arabic + repeat counts) | Hisn al-Muslim by Sa'id bin Ali bin Wahf al-Qahtani — hisnmuslim.com official API |
 | Adhkar Somali meanings + hadith references | "Xisnul Muslim – Dhufeyska Muslinka" (islamic-invitation.com), matched by Hisn al-Muslim number |
 | Prayer times | Adhan.js (offline). Method chosen from the device time zone; Somalia / Africa = Egyptian General Authority |
+| Qibla | Adhan.js and GPS; compass corrected to true north with the World Magnetic Model 2025 |
 
 Source data lives in `data/quran.json` and `data/hisn.json`. `npm run build` (via `prebuild`) splits it into small per-surah and per-chapter files in `public/data/`.
 

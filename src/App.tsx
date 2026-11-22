@@ -38,6 +38,7 @@ const Quran = lazyPage(() => import('./pages/Quran'))
 const Adhkar = lazyPage(() => import('./pages/Adhkar'))
 const AdhkarSession = lazyPage(() => import('./pages/AdhkarSession'))
 const Prayer = lazyPage(() => import('./pages/Prayer'))
+const Qibla = lazyPage(() => import('./pages/Qibla'))
 const Khatma = lazyPage(() => import('./pages/Khatma'))
 const Notifications = lazyPage(() => import('./pages/Notifications'))
 const Privacy = lazyPage(() => import('./pages/Privacy'))
@@ -76,6 +77,7 @@ export default function App() {
                   <Route path="adkaarta" element={<Adhkar />} />
                   <Route path="adkaarta/:key" element={<AdhkarSession />} />
                   <Route path="salaadda" element={<Prayer />} />
+                  <Route path="qiblada" element={<Qibla />} />
                   <Route path="khatmiga" element={<Khatma />} />
                   <Route path="ogeysiisyada" element={<Notifications />} />
                   <Route path="*" element={<Home />} />

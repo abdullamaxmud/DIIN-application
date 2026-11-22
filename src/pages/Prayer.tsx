@@ -1,14 +1,16 @@
-import { t } from '../i18n'
+import { Link } from 'react-router-dom'
+import { t, tList } from '../i18n'
 import { useNotifyPrefs, type FivePrayers } from '../lib/push'
 import { useLocation } from '../lib/location'
 import { usePrayer } from '../lib/usePrayer'
 import { PRAYERS, formatTime, type PrayerKey } from '../lib/prayer'
 import { formatGregorian, formatHijri } from '../lib/dates'
+import { compassPoint, distanceToKaaba, qiblaBearing } from '../lib/qibla'
 import { useWidth } from '../lib/useWidth'
 import { StarPattern } from '../components/StarPattern'
 import { LocationGate } from '../components/LocationGate'
 import { SunArc } from '../components/SunArc'
-import { BellIcon, PinIcon } from '../components/Icons'
+import { BellIcon, ChevronRightIcon, PinIcon } from '../components/Icons'
 
 export default function Prayer() {
   const { fix, status, request } = useLocation()
@@ -32,6 +34,7 @@ export default function Prayer() {
     setPrefs({ ...prefs, prayers: { ...prefs.prayers, [key]: !isOn(key) } })
   }
   const now = new Date()
+  const qibla = qiblaBearing(fix.lat, fix.lng)
 
   return (
     <>
@@ -67,6 +70,19 @@ export default function Prayer() {
       </header>
 
       <main className="flex flex-col gap-2.5 px-4 pt-3">
+        <Link to="/qiblada" className="night relative flex min-h-[64px] items-center gap-3 overflow-hidden rounded-[20px] px-3.5 py-2.5 no-underline">
+          <StarPattern opacity={0.08} size={40} />
+          <span className="relative flex h-11 w-11 flex-none items-center justify-center rounded-[14px] border border-gold/45 bg-gold/15 text-gold-soft" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="m15.5 8.5-2 5-5 2 2-5z" fill="currentColor" /></svg>
+          </span>
+          <span className="relative min-w-0 flex-1">
+            <span className="block font-serif text-[17px] leading-tight font-semibold text-ivory">{t('qibla.card')}</span>
+            <span className="mt-0.5 block truncate text-xs font-bold text-mist tabular-nums">
+              {t('qibla.cardSub', { deg: Math.round(qibla) % 360, point: tList('qibla.points')[compassPoint(qibla)], km: Math.round(distanceToKaaba(fix.lat, fix.lng)).toLocaleString('en-US') })}
+            </span>
+          </span>
+          <span aria-hidden="true" className="relative flex h-9 w-9 flex-none items-center justify-center rounded-full bg-gold text-night"><ChevronRightIcon /></span>
+        </Link>
         <ul className="card m-0 list-none p-1">
           {PRAYERS.map((p) => {
             const on = isOn(p.key)

@@ -61,7 +61,7 @@
       "Hoos ka hel DIIN (ama Safari) → While Using the App."
     ],
     "comeBack": "Marka aad shiddo, ku soo noqo — si toos ah ayaan kuugu xidhi doonnaa.",
-    "privacy": "Goobtaada cid kale looma diro — xisaabtu waxay ku dhacdaa gudaha taleefankaaga.",
+    "privacy": "Waqtiyada salaadda waxaa lagu xisaabiyaa taleefankaaga. Haddii aad daarto ogeysiisyada, goob la soo koobay (qiyaastii 1 km) ayaa server-ka loo diraa.",
     "unsupported": "Taleefankan ama browser-kan goob (GPS) ma bixiyo.",
     "refresh": "Cusbooneysii goobta",
     "myLocation": "Goobtayda (GPS)",
@@ -516,7 +516,6 @@
     "MY": "Malaysia",
     "ZA": "Koonfur Afrika"
   },
-  "_review": "Erayada Soomaaliga waxaa qoray AI; waa in uu dib u eego qof af-Soomaali ku hadla ka hor daabacaadda.",
   "auth": {
     "needName": "Fadlan qor magacaaga.",
     "needEmail": "Fadlan qor email sax ah.",
@@ -533,5 +532,48 @@
     "disabled": "Akoonkan waa la joojiyay.",
     "mismatch": "Akoon kale ayaad gashay. Fadlan isticmaal akoonkaaga saxda ah.",
     "generic": "Wax khalad ah ayaa dhacay. Fadlan isku day mar kale."
-  }
+  },
+  "qibla": {
+    "title": "Jihada Qiblada",
+    "subtitle": "Taleefanka u jeedi dhanka Kacbada",
+    "back": "Ku noqo Salaadda",
+    "letters": [
+      "W",
+      "B",
+      "K",
+      "G"
+    ],
+    "points": [
+      "Waqooyi",
+      "Waqooyi-Bari",
+      "Bari",
+      "Koonfur-Bari",
+      "Koonfur",
+      "Koonfur-Galbeed",
+      "Galbeed",
+      "Waqooyi-Galbeed"
+    ],
+    "dialLabel": "Qiblada waa {deg} darajo laga bilaabo Waqooyiga, dhanka {point}",
+    "enable": "Daar compass-ka",
+    "starting": "Compass-ka waa la furayaa…",
+    "denied": "Compass-ka lama oggolaan. Xir app-ka oo dib u fur, kadib taabo “Allow”.",
+    "unavailable": "Qalabkan compass lagama helin. Qiblada waa {deg}° laga bilaabo Waqooyiga, dhanka saacadda.",
+    "aligned": "Waxaad u jeeddaa Qiblada",
+    "turnRight": "U jeeso midigta {n}°",
+    "turnLeft": "U jeeso bidixda {n}°",
+    "direction": "Jihada",
+    "distance": "Masaafada",
+    "kmToKaaba": "km ilaa Kacbada",
+    "tipsTitle": "Si sax ah u isticmaal",
+    "calibrateNow": "Compass-ku wuxuu u baahan yahay hagaajin",
+    "tips": [
+      "Taleefanka si siman ugu hay gacantaada.",
+      "Ka fogee bir, magnet, baabuur iyo qalab koronto.",
+      "Haddii jihadu isbeddesho, taleefanka hawada ku dhaqaaji qaab 8 ah."
+    ],
+    "source": "Xisaabta: Adhan.js iyo GPS-kaaga. Waqooyiga dhabta ah: World Magnetic Model 2025.",
+    "card": "Jihada Qiblada",
+    "cardSub": "{deg}° · {point} · {km} km"
+  },
+  "_review": "Erayada Soomaaliga waxaa qoray AI; waa in uu dib u eego qof af-Soomaali ku hadla ka hor daabacaadda."
 }
